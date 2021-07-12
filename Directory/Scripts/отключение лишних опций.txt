@@ -1,0 +1,37 @@
+$(function () {
+                $('input[type="radio"]').click(function () {
+                    if ($('#18').is(':checked')) {
+                        $('#33').prop('checked', false);
+                        $('#34').prop('checked', false);
+                        $('#35').prop('checked', false);
+                        $('#36').prop('checked', false);
+
+                        $('#28').prop('disabled', false);
+                        $('#29').prop('disabled', false);
+                        $('#30').prop('disabled', false);
+                        $('#31').prop('disabled', false);
+                        $('#32').prop('disabled', false);
+                        $('#33').prop('disabled', true);
+                        $('#34').prop('disabled', true);
+                        $('#35').prop('disabled', true);
+                        $('#36').prop('disabled', true);
+                    }
+                    if ($('#19').is(':checked') || $('#20').is(':checked')) {
+                        $('#28').prop('checked', false);
+                        $('#29').prop('checked', false);
+                        $('#30').prop('checked', false);
+                        $('#31').prop('checked', false);
+                        $('#32').prop('checked', false);
+
+                        $('#28').prop('disabled', true);
+                        $('#29').prop('disabled', true);
+                        $('#30').prop('disabled', true);
+                        $('#31').prop('disabled', true);
+                        $('#32').prop('disabled', true);
+                        $('#33').prop('disabled', false);
+                        $('#34').prop('disabled', false);
+                        $('#35').prop('disabled', false);
+                        $('#36').prop('disabled', false);   
+                    }
+                });
+            });

@@ -46,6 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EasyDox, Version=2.0.34.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyDox.2.0.34\lib\EasyDox.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -131,11 +134,20 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202007222015302_MigrateDB.cs" />
+    <Compile Include="Migrations\202007222015302_MigrateDB.designer.cs">
+      <DependentUpon>202007222015302_MigrateDB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AdditionBlocks.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\Lawsuit.cs" />
     <Compile Include="Models\Option.cs" />
+    <Compile Include="Models\OptionAdditions.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\QuestionOptions.cs" />
+    <Compile Include="Models\Test.cs" />
+    <Compile Include="Models\Users.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -143,16 +155,23 @@
     <Content Include="App_Data\Lawsuits_log.ldf">
       <DependentUpon>Lawsuits.mdf</DependentUpon>
     </Content>
+    <Content Include="Content\AdminForms.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\formCSS.css" />
+    <Content Include="Content\mainPageCSS.css" />
     <Content Include="favicon.ico" />
+    <Content Include="Files\Templates\Templates.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Files\sample.pdf" />
+    <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -164,6 +183,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Views\Home\Templ\Templates.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -177,6 +197,20 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Form.cshtml" />
+    <Content Include="Views\Home\SendFile.cshtml" />
+    <Content Include="Views\Home\Admin.cshtml" />
+    <Content Include="Views\View.cshtml" />
+    <Content Include="Views\Home\EditQuestion.cshtml" />
+    <Content Include="Views\Home\EditOption.cshtml" />
+    <Content Include="Views\Home\CreateQuestion.cshtml" />
+    <Content Include="Views\Home\CreateOption.cshtml" />
+    <Content Include="Views\Home\CreateAddition.cshtml" />
+    <Content Include="Views\Home\AdminAuth.cshtml" />
+    <Content Include="Views\Shared\AdminCheck.cshtml" />
+    <Content Include="Views\Home\DeleteQuestion.cshtml" />
+    <Content Include="Views\Home\DeleteOption.cshtml" />
+    <Content Include="Views\Home\DeleteAddition.cshtml" />
+    <Content Include="Views\Home\EditAddition.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
@@ -219,6 +253,12 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202007222015302_MigrateDB.resx">
+      <DependentUpon>202007222015302_MigrateDB.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,0 +1,51 @@
+﻿.my-main {
+    /*height: 100%;*/
+}
+
+.left, .right {
+    border: 1px solid #1E90FF;
+    border-collapse: collapse;
+}
+
+.left {
+    border-right: none;
+}
+
+.right {
+    text-align: center;
+}
+
+.docx {
+    /*width: 90%;*/
+    
+    /*height: 85vh;*/
+    background-color: white;
+    margin: 0px auto;
+}
+
+.left h3 {
+    margin-top: 50px;
+    margin-left: 20px;
+}
+
+.table .question {
+    background-color: #D3D3D3;
+}
+
+
+
+@keyframes anime {
+    from {
+        background-color: #FFFF00;
+    }
+    to {
+        background-color: #FFFFFF;
+    }
+}
+
+.hidden{
+    visibility:hidden;
+}
+.visible{
+    visibility:visible;
+}

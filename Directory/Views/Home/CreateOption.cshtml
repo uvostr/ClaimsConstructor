@@ -1,0 +1,22 @@
+﻿@model global::Directory.Models.Option
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <link rel="stylesheet" href="../../Content/AdminForms.css">
+</head>
+
+<h2>Новый вариант ответа</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(model => model.Text, "Текст варианта ответа")
+    <br />
+    @Html.TextAreaFor(model => model.Text)
+    <br />
+    <br />
+
+    <input type="submit" value="Добавить" />
+}

@@ -1,0 +1,20 @@
+﻿TABLE {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+tr.question {
+    font-weight: bold;
+    border-top: 2px solid black;
+    height: 30px;
+}
+
+tr.option {
+    border-top: 1px solid lightgrey;
+    height: 30px;
+}
+
+td.option {
+    padding-left: 1.5em;
+}

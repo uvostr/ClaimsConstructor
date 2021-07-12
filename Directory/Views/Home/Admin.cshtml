@@ -1,0 +1,54 @@
+﻿@model IEnumerable<global::Directory.Models.QuestionOptions>
+@{
+    Layout = "~/Views/Shared/AdminCheck.cshtml";
+}
+<html>
+
+<head>
+    <link rel="stylesheet" href="../../Content/Admin.css">
+</head>
+
+<body>
+          <table>
+            <tr class="question">
+                <td width="70%">
+                    @Html.ActionLink("Добавить новый вопрос", "CreateQuestion")
+                </td>
+                <td width="30%"></td>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr class="question">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.question.Text)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Редактировать", "EditQuestion", new { id = item.question.Id }) |
+                        @Html.ActionLink("Удалить", "DeleteQuestion", new { item.question.Id })
+                    </td>
+                </tr>
+                foreach (var opt in item.options)
+                {
+                    <tr class="option">
+                        <td class="option">
+                            @Html.DisplayFor(modelItem => opt.Text)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Редактировать", "EditOption", new { id = opt.Id }) |
+                            @Html.ActionLink("Удалить", "DeleteOption", new { opt.Id })
+                        </td>
+                    </tr>
+                }
+                <tr class="option">
+                    <td class="option">
+                        @Html.ActionLink("Добавить новый вариант ответа", "CreateOption", new { QuestionId = item.question.Id })
+                    </td>
+                    <td></td>
+                </tr>
+            }
+        </table>
+   
+</body>
+</html>
+
+

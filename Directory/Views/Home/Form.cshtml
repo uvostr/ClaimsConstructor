@@ -1,30 +1,412 @@
 ﻿@model IEnumerable<global::Directory.Models.QuestionOptions>
 
-@{
-    ViewBag.Title = "Form";
-}
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<h1>Опросный лист</h1>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../../Content/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../Content/formCSS.css">
+    <title>Hello, world!</title>
+</head>
+<body style="height:100vh;">
+    <div class="row no-gutters my-main" style="height:95vh;">
+        <div class="col-6 col-md-4 left" style="border:hidden;">
+            <h2 style="height:5vh;">Вопросы к шаблону</h2>
+            <form action="/Home/SendFile" method="GET">
+                <div style="height:80vh; overflow:scroll; overflow-x:hidden; border:hidden;">
+                    <input type="hidden" value="@ViewBag.LawsuitsId" name="LawsuitsId" />
 
-<table  class="table">
+                    <table class="table">
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.Label(item.question.Text)
-            </td>
-        </tr>
 
-        foreach (var opt in item.options)
-        {
-            <tr>
-                <td>
-                    @Html.Raw(opt.Text)
-                    @Html.RadioButton($"rb+{item.question.Id}", opt.Text)
-                </td>
-            </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr class="question">
+                                <td>
+                                    @Html.Label(@item.question.Text)
+                                    @if (item.question.Tip != null)
+                                    {
+                                        <button type="button" class="btn btn-primary" title="@item.question.Tip" data-toggle="tooltip" data-placement="right" style="background:lightgrey; border:0; margin:0">
+                                            <img src="~/Content/Images/information.png" width="15" height="15" />
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                            if (item.question.TypeInput == "одиночный")
+                            {
+                                foreach (var opt in item.options)
+                                {
+                                    <tr class="answer" id="tr_@opt.Id">
+                                        <td>
+                                            <div class="custom-control custom-radio">
+                                                @Html.RadioButton($"{item.question.Id}", opt.Id, new
+                                           {
+                                               @class = "custom-control-input try",
+                                                    @onClick = $"ShowHideDiv({item.question.Id})",
+                                                    @id = $"{opt.Id}",
+                                                     @required = "required"
+                                           })
+
+                                                <label for="defaultUnchecked2" style="display: inline">@opt.Text</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            if (item.question.TypeInput == "множественный")
+                            {
+                                foreach (var opt in item.options)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="@item.question.Id" value="@opt.Id" onclick="ShowHideDivCheckbox(@opt.Id)" id="checkBox{@opt.Id}" />
+                                            <label for="defaultUnchecked2" style="display: inline">@opt.Text</label>
+                                        </td>
+                                    </tr>
+                                }
+
+                            }
+
+
+                        }
+
+                    </table>
+                </div>
+                <div style="height:10vh;">
+                    <input type="submit" class="btn btn-secondary btn-lg btn-block" style="margin: 2px" value="Получить шаблон" />
+                </div>
+
+
+
+
+            </form>
+
+        </div>
+        <div class="col-12 col-sm-6 col-md-8 right" style="border-color:gray">
+            <h2 style="height:5vh;">Шаблон документа</h2>
+            @*<h3>@ViewBag.name</h3>*@
+            <div style="height:85vh; overflow:scroll; overflow-x:hidden;">
+                <div class="calibre" id="calibre_link-0">
+
+                    <!-- Вставляем наши темплейты -->
+                    @{Html.RenderPartial("Templ/Templates");}
+
+                    <!-- В какой суд (в зависимости от цены иска) -->
+                    <p class="block_1" id="addition1">В_________________ <span class="text_"><a href="#tip1">&lt;1&gt;</a></span></p>
+
+                    <!-- Информация про истца -->
+                    <p class="block_3">Истец: ____________________________________(Ф.И.О. потребителя)*,</p>
+                    <p class="block_3">адрес*: ________________________________________________________,</p>
+                    <p class="block_3">телефон: ______________________, факс: ________________________,</p>
+                    <p class="block_3">адрес электронной почты: _______________________________________</p>
+
+                    <!-- Есть ли представитель истца?
+                Вопрос с id=3
+    -->
+                    <div id="addition3"></div>
+
+                    <!-- Ответчик - ЮЛ или ИП?
+            Вопрос с id=9
+    -->
+                    <div id="addition9">
+                        <p class="block_3">Ответчик: ___________________________ (наименование* или Ф.И.О.*),</p>
+                        <p class="block_3">адрес*: ________________________________________________________,</p>
+                        <p class="block_3">телефон: ______________________, факс: ________________________,</p>
+                        <p class="block_3">адрес электронной почты: _______________________________________</p>
+                        <p class="block_3"> </p>
+                    </div>
+
+                    <p class="block_3" style="margin-top: 40px;"> </p>
+                    <p class="block_3">Цена иска: ________________________________ рублей <span class="text_"><a href="#tip4">&lt;4&gt;</a></span></p>
+
+                    <!-- ГОСПОШЛИНА ЕСТЬ ИЛИ НЕТ?
+            Вопрос с id=22
+    -->
+                    <div id="addition22"> </div>
+
+
+                    <!-- НАЗВАНИЕ ДОКУМЕНТА (ИСКОВОЕ ЗАЯВЛЕНИЕ)-->
+                    <p class="block_5"><b class="calibre6">Исковое заявление </b></p>
+
+                    <!--                О чем?
+    Зависит от вопроса id17 об основных требованиях
+    -->
+                    <div id="addition17_2">
+                        <p class="block_5"></p>
+                    </div>
+                    <p class="block_7"></p>
+
+                    <!-- Тип договора (id=13)-->
+                    <div id="addition13"> </div>
+
+
+                    <!-- В чем состояло нарушение договора?
+           Вопросы id13 и id14 в совокупности
+    -->
+                    <p class="block_2"><span id="addition13_9"></span> <span id="addition14"></span><span id="addition13_3"></span></p>
+
+
+                    <!-- НАРУШЕНЫ ПРАВА И ИНТЕРЕСЫ ИСТЦА (текст)
+            НЕТ ADDITIONS до сл. комментария
+    -->
+                    <p class="block_2">В результате нарушения ответчиком условий Договора нарушены права и законные интересы истца, что выражается в следующем: _________________________ и подтверждается _____________________________.</p>
+                    <p class="block_2">Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100025&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100025&amp;fld=134" class="text_1">п. 1 ст. 4</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" продавец (исполнитель) обязан передать потребителю товар (выполнить работу, оказать услугу), качество которого соответствует договору.</p>
+                    <p class="block_2">(Варианты. Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100041&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100041&amp;fld=134" class="text_1">п. 1 ст. 7</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" потребитель имеет право на то, чтобы товар (работа, услуга) при обычных условиях его использования, хранения, транспортировки и утилизации был безопасен для жизни, здоровья потребителя, окружающей среды, а также не причинял вред имуществу потребителя. Требования, которые должны обеспечивать безопасность товара (работы, услуги) для жизни и здоровья потребителя, окружающей среды, а также предотвращение причинения вреда имуществу потребителя, являются обязательными и устанавливаются законом или в установленном им порядке.</p>
+                    <p class="block_2">Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100053&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100053&amp;fld=134" class="text_1">п. 1 ст. 8</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" потребитель вправе потребовать предоставления необходимой и достоверной информации об изготовителе (исполнителе, продавце), режиме его работы и реализуемых им товарах (работах, услугах).</p>
+                    <p class="block_2">Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100061&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100061&amp;fld=134" class="text_1">п. 1 ст. 10</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" изготовитель (исполнитель, продавец) обязан своевременно предоставлять потребителю необходимую и достоверную информацию о товарах (работах, услугах), обеспечивающую возможность их правильного выбора. По отдельным видам товаров (работ, услуг) перечень и способы доведения информации до потребителя устанавливаются Правительством Российской Федерации.)</p>
+
+
+                    <!-- ОСНОВНОЕ ТРЕБОВАНИЕ (id17)-->
+                    <div id="addition17"></div>
+
+
+                    <!-- ИЗМЕНЕНИЕ ОСНОВНОЙ ЧАСТИ ДОКУМЕНТА В ЗАВИСИМОСТИ ОТ
+                    ДОПОЛНИТЕЛЬНЫХ ТРЕБОВАНИЙ (id18)
+    -->
+                    <div id="addition18_1_1"></div>
+                    <div id="addition18_2_1"> </div>
+                    <div id="addition18_3_1"></div>
+                    <div id="addition18_4_1"></div>
+                    <div id="addition18_5_1"></div>
+                    <div id="addition18_7_1"></div>
+
+
+                    <!-- ПРЕДПРИНЯЛ ЛИ ИСТЕЦ ПОПЫТКУ УРЕГУЛИРОВАТЬ СПОР, НЕ ПРИБЕГАЯ К СУДЕБНОЙ ПРАКТИКЕ?
+                                        Вопрос с id16
+    -->
+                    <div id="addition16"></div>
+
+
+                    <!-- ПРОСИТЕЛЬНАЯ ЧАСТЬ
+     нет ADDITIONS до сл. комментария
+    -->
+                    <p class="block_2">На  основании изложенного, руководствуясь положениями <a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020" class="text_1">Закона</a> Российской Федерации  от  07.02.1992  N  2300-1  "О защите прав потребителей", ст. 151 Гражданского  кодекса  Российской Федерации, в соответствии со ст. 131, 132 Гражданского процессуального кодекса Российской Федерации, <b class="calibre6">прошу</b>:</p>
+
+                    <!-- Из вопроса с id17 об основных требованиях-->
+                    <div id="addition17_1"> </div>
+
+                    <!-- Из вопроса с na18 (checkbox) о дополнительных требованиях-->
+                    <div id="addition18_1"></div>
+                    <div id="addition18_2"></div>
+                    <div id="addition18_3"></div>
+                    <div id="addition18_4"></div>
+                    <div id="addition18_5"></div>
+                    <div id="addition18_7"></div>
+
+
+                    <!-- ПРИЛОЖЕНИЯ (есть additionы) -->
+
+                    <p class="block_2"><b class="calibre6">Приложение: </b></p>
+
+                    <div id="addition13_2"></div>
+
+                    <p class="block_2">● Документы, подтверждающие обстоятельства, на которых истец основывает свои требования.</p>
+                    <p class="block_2">● Расчет взыскиваемой денежной суммы.</p>
+                    <p class="block_2">● Документы, подтверждающие несение судебных расходов.</p>
+                    <p class="block_2">● Копия требования (претензии) истца и доказательства отказа ответчика от удовлетворения требования (претензии) истца <span class="text_"><a href="#tip5">&lt;5&gt;</a></span>.</p>
+                    <p class="block_2">● Уведомление о вручении или иные документы, подтверждающие направление ответчику и третьим лицам (если они участвуют в деле) копий искового заявления и приложенных к нему документов, которые у него отсутствуют.</p>
+
+                    <div id="addition3_1">
+                        <p class="block_2"> </p>
+                    </div>
+
+                    <div id="addition18_1_2"> </div>
+                    <div id="addition18_2_2"> </div>
+                    <div id="addition18_3_2"> </div>
+                    <div id="addition18_4_2"> </div>
+                    <div id="addition18_5_2"> </div>
+                    <div id="addition18_7_2"> </div>
+
+                    <!-- КОНЕЦ ДОКУМЕНТА -->
+
+                    <p class="block_2">Истец (представитель)</p>
+                    <p class="block_7"> </p>
+                    <p class="block_2">"___"__________ ____ г.</p>
+                    <p class="block_7"> </p>
+                    <p class="block_2">________________(подпись) /__________________________________________(Ф.И.О.)</p>
+                    <p class="block_2"> </p>
+                    <p class="block_2">--------------------------------</p>
+                    <p class="block_2"></p>
+                    <p class="block_2"> </p>
+
+                    <!-- ССЫЛКИ
+      больше нет additions
+    -->
+
+                    <p class="block_5">  _____ ССЫЛКИ _____ </p>
+                    <p class="block_2"> </p>
+                    <a name="tip1"></a>
+                    <p class="block_2"><span class="text_">&lt;1&gt; О разграничении подсудности между мировым судьей и районным судом см.</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=100110&amp;fld=134" class="text_1"> ст. ст. 23</a><span class="text_"> и</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=100122&amp;fld=134" class="text_1"> 24</a><span class="text_"> Гражданского процессуального кодекса Российской Федерации.</span></p>
+                    <p class="block_2"><span class="text_">В соответствии со ст.ст.27-30</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=1721&amp;fld=134" class="text_1"> </a><span class="text_">Гражданского процессуального кодекса Российской Федерации определяется территориальная подсудность.</span> </p>
+
+                    <a name="tip2"></a>
+                    <p class="block_2"> </p>
+                    <p class="block_2"><span class="text_">&lt;2&gt; О требованиях, предъявляемых к представителям и документам, подтверждающим их полномочия, см.</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=1208&amp;fld=134" class="text_1"> ст. ст. 49</a><span class="text_"> -</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=100253&amp;fld=134" class="text_1"> 54</a><span class="text_"> Гражданского процессуального кодекса Российской Федерации.</span></p>
+
+                    <a name="tip3"></a>
+                    <p class="block_2"> </p>
+                    <p class="block_2"><span class="text_">&lt;3&gt; Указывается один из идентификаторов: СНИЛС, ИНН, ОГРНИП, серия и номер документа, удостоверяющего личность, водительского удостоверения или свидетельства о регистрации транспортного средства. Если истцом является гражданин, идентификатор указывается, если он ему известен (</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=1269&amp;fld=134" class="text_1">п. 3 ч. 2 ст. 131</a><span class="text_"> Гражданского процессуального кодекса Российской Федерации).</span></p>
+
+                    <a name="tip4"></a>
+                    <p class="block_2"> </p>
+                    <p class="block_2"><span class="text_">&lt;4&gt; О категориях лиц, освобождённых от уплаты госпошлины - см. ст. 333.36 НК РФ</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=100427&amp;fld=134" class="text_1"> п. 1 ч. 1 ст. 91</a><span class="text_"> Гражданского процессуального кодекса Российской Федерации, определяется исходя из взыскиваемой денежной суммы.</span></p>
+
+                    <a name="tip5"></a>
+                    <p class="block_2"> </p>
+                    <p class="block_2"><span class="text_">&lt;5&gt; Согласно</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=1275&amp;fld=134" class="text_1"> п. 3 ст. 132</a><span class="text_"> Гражданского процессуального кодекса Российской Федерации к исковому заявлению должны быть приложены документы, подтверждающие выполнение обязательного досудебного порядка урегулирования спора, если такой порядок установлен федеральным законом.</span></p>
+
+                    <a name="tip6"></a>
+                    <p class="block_2"><span class="text_">&lt;6&gt; Подробнее: ст. 18, 29 Закона РФ от 07.02.1992 N 2300-1 "О защите прав потребителей"</span></p>
+
+                    <p class="block_26"> </p>
+                    <p class="block_27"></p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+
+    <!-- ONCLICK ФУНЦИИ, МЕНЯЮЩИЕ ДОКУМЕНТ и АНКЕТУ-->
+    <!-- При нажатии в функцию передается name вопроса,
+    затем в зависимости от ответа то или иное окно
+    меняется на необходимый кусок, взятый из templates. -->
+
+    <script>
+
+        function ShowHideDivCheckbox(number) {
+            var num = number - 36;
+            var stringId = "addition18_" + num;
+            var chboxId = "checkBox{" + number + "}";
+
+            var chbox = document.getElementById(chboxId);
+            if (chbox.checked) {
+                var clon = document.getElementById("tempId_18_" + num + "_1").content.cloneNode(true);
+                document.getElementById(stringId).replaceWith(clon);
+                var clon2 = document.getElementById("tempId_18_" + num + "_1_1").content.cloneNode(true);
+                document.getElementById(stringId + "_1").replaceWith(clon2);
+                var clon3 = document.getElementById("tempId_18_" + num + "_1_2").content.cloneNode(true);
+                document.getElementById(stringId + "_2").replaceWith(clon3);
+            } else {
+                var clon = document.getElementById("tempId_18_" + num + "_2").content.cloneNode(true);
+                document.getElementById(stringId).replaceWith(clon);
+                var clon2 = document.getElementById("tempId_18_" + num + "_2_1").content.cloneNode(true);
+                document.getElementById(stringId + "_1").replaceWith(clon2);
+                var clon3 = document.getElementById("tempId_18_" + num + "_2_2").content.cloneNode(true);
+                document.getElementById(stringId + "_2").replaceWith(clon3);
+            }
         }
-    }
 
-</table>
+        function ShowHideDiv(number) {
+            var stringId = "addition" + number;
+            var anchorId = "anchor" + number;
+            var tempAdd = number;
+            var id = number + "";
+
+
+            var chk = document.getElementsByName(id);
+            var chosen = 0;
+            for (var i = 0; i < chk.length; ++i) {
+                if (chk[i].checked) {
+                    chosen = i;
+                }
+            }
+            var clon = document.getElementById("tempId_" + id + "_" + (chosen + 1)).content.cloneNode(true);
+            document.getElementById(stringId).replaceWith(clon);
+
+            if (number == 13) {
+                var clon2 = document.getElementById("tempId_" + id + "_" + (chosen + 1) + "_2").content.cloneNode(true);
+                document.getElementById(stringId + "_2").replaceWith(clon2);
+                var clon3 = document.getElementById("tempId_" + id + "_" + (chosen + 1) + "_3").content.cloneNode(true);
+                document.getElementById(stringId + "_3").replaceWith(clon3);
+                var clon4 = document.getElementById("tempId_" + id + "_" + (chosen + 1) + "_9").content.cloneNode(true);
+                document.getElementById(stringId + "_9").replaceWith(clon4);
+            }
+            if (number == 14) {
+                if (chosen == 0) {
+                    var clon3 = document.getElementById("tempId_13_4_3").content.cloneNode(true);
+                    document.getElementById("addition13_3").replaceWith(clon3);
+                } else {
+                    var chk2 = document.getElementsByName("13");
+                    var chosen2 = 0;
+                    for (var i = 0; i < chk2.length; ++i) {
+                        if (chk2[i].checked) {
+                            chosen2 = i;
+                        }
+                    }
+                    var clon4 = document.getElementById("tempId_13_" + (chosen2 + 1) + "_3").content.cloneNode(true);
+                    document.getElementById("addition13_3").replaceWith(clon4);
+                }
+            }
+
+            if (number == 17) {
+                var clon2 = document.getElementById("tempId_" + id + "_" + (chosen + 1) + "_1").content.cloneNode(true);
+                document.getElementById(stringId + "_1").replaceWith(clon2);
+                var clon3 = document.getElementById("tempId_" + id + "_" + (chosen + 1) + "_2").content.cloneNode(true);
+                document.getElementById(stringId + "_2").replaceWith(clon3);
+            }
+
+            if (number == 3) {
+                var clon2 = document.getElementById("tempId_" + id + "_" + (chosen + 1) + "_1").content.cloneNode(true);
+                document.getElementById(stringId + "_1").replaceWith(clon2);
+            }
+        }
+
+        $(function () {
+            $('input[type="radio"]').click(function () {
+                if ($('#18').is(':checked')) {
+                    $('#tr_28').css('display', 'block');
+                    $('#tr_29').css('display', 'block');
+                    $('#tr_30').css('display', 'block');
+                    $('#tr_31').css('display', 'block');
+                    $('#tr_32').css('display', 'block');
+                    $('#tr_33').css('display', 'none');
+                    $('#tr_34').css('display', 'none');
+                    $('#tr_35').css('display', 'none');
+                    $('#tr_36').css('display', 'none');
+
+
+                    $('#33').prop('checked', false);
+                    $('#34').prop('checked', false);
+                    $('#35').prop('checked', false);
+                    $('#36').prop('checked', false);
+                }
+                if ($('#19').is(':checked') || $('#20').is(':checked')) {
+                    $('#tr_28').css('display', 'none');
+                    $('#tr_29').css('display', 'none');
+                    $('#tr_30').css('display', 'none');
+                    $('#tr_31').css('display', 'none');
+                    $('#tr_32').css('display', 'none');
+                    $('#tr_33').css('display', 'block');
+                    $('#tr_34').css('display', 'block');
+                    $('#tr_35').css('display', 'block');
+                    $('#tr_36').css('display', 'block');
+
+                    $('#28').prop('checked', false);
+                    $('#29').prop('checked', false);
+                    $('#30').prop('checked', false);
+                    $('#31').prop('checked', false);
+                    $('#32').prop('checked', false);
+                }
+            });
+        });
+
+    </script>
+</body>

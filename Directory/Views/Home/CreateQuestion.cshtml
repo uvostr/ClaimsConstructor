@@ -1,0 +1,34 @@
+﻿@model global::Directory.Models.Question
+
+@{
+    Layout = "~/Views/Shared/AdminCheck.cshtml";
+}
+<head>
+    <link rel="stylesheet" href="../../Content/AdminForms.css">
+</head>
+<h2>Новый вопрос</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(model => model.Text, "Текст вопроса")
+    <br />
+    @Html.TextAreaFor(model => model.Text)
+    <br />
+    <br />
+
+    @Html.LabelFor(model => model.Tip, "Всплывающая подсказка")
+    <br />
+    @Html.TextAreaFor(model => model.Tip)
+    <br />
+    <br />
+
+
+    @Html.LabelFor(model => model.TypeInput, "Одиночный/множественный выбор")
+    <br />
+    @Html.DropDownListFor(model => model.TypeInput, new SelectList(new string[] { "одиночный", "множественный" }))
+    <br />
+    <br />
+
+
+    <input type="submit" value="Добавить" />
+}

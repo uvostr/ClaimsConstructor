@@ -1,0 +1,26 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+.list6b {
+    padding: 0;
+    list-style: none;
+}
+
+    .list6b li {
+        padding: 6px;
+    }
+
+        .list6b li:before {
+            padding-right: 10px;
+            font-weight: bold;
+            color: #C0C0C0;
+            content: "\2714";
+            transition-duration: 0.5s;
+        }
+
+        .list6b li:hover:before {
+            color: #337AB7;
+            content: "\2714";
+        } 

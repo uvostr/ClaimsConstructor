@@ -1,0 +1,454 @@
+﻿@model IEnumerable<global::Directory.Models.QuestionOptions>
+
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="../../Content/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="../../Content/formCSS.css">
+        <title>Hello, world!</title>
+    </head>
+    <body>
+        <div class="row no-gutters my-main">
+            <div class="col-6 col-md-4 left">
+                <h3>Вопросы к шаблону</h3>
+                <form action="/Home/SendFile" method="GET">
+                    <input type="hidden" value="@ViewBag.LawsuitsId" name="LawsuitsId" />
+                    <table class="table">
+
+                        @foreach (var item in Model)
+                        {
+                            //тут начинается то, что надо переделать
+                            <tr class="question">
+                                <td>
+                                    @Html.Label(@item.question.Text)
+                                    @if (item.question.Tip != null)
+                                    {
+                                        <button type="button" class="btn btn-primary" title="@item.question.Tip" data-toggle="tooltip" data-placement="right" style="background:lightgrey; border:0; margin:0">
+                                            <img src="~/Content/Images/information.png" width="15" height="15" />
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                            //тут заканчивается
+                            foreach (var opt in item.options)
+                            { 
+                                <tr class="answer" id="tr_@opt.Id">
+                                    <td>
+                                        <div class="custom-control custom-radio">
+                                            @if (item.question.Id == 18)
+                                            {
+                                                <input type="checkbox" name="@item.question.Id" value="@opt.Id" onclick="ShowHideDivCheckbox(@opt.Id)" id="checkBox{@opt.Id}" />
+                                                <label for="defaultUnchecked2" style="display: inline">@opt.Text</label>
+                                            }
+                                            else
+                                            {
+                                                    @Html.RadioButton($"{item.question.Id}", opt.Id, new
+                                               {
+                                                   @class = "custom-control-input try",
+                                                   @onClick = $"ShowHideDiv({item.question.Id})",
+                                                   @id = $"{opt.Id}",
+                                                   @required = "required"
+                                               })
+                                                <label for="defaultUnchecked2" style="display: inline">@opt.Text</label>
+                                            }
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+
+                        }
+                    </table>
+                    <input type="submit" class="btn btn-secondary btn-lg btn-block" value="Получить шаблон" />
+                </form>
+
+            </div>
+            <div class="col-12 col-sm-6 col-md-8 right">
+                <h2>Шаблон документа</h2>
+                <h3>@ViewBag.name</h3>
+                <div class="calibre" id="calibre_link-0">
+                    <!-- <p class="block_">Пояснения в начале: красным цветом выделены пояснения для программистов. Звездочкой: * отмечены позиции, которые должны быть обязательными для заполнения пользователем. Цифрами в треугольниках отмечены места, где должны быть всплывающие уведомления для пользователя, ниже синим цветом выделен текст этого пояснения.</p>
+    <p class="block_"> </p>
+    <table class="table_">
+        <tbody class="calibre1">
+            <tr class="tr_">
+                <td class="td_"><p class="block_"></p></td>
+            </tr>
+        </tbody>
+    </table>
+    -->
+                    <div id="anchor1"> </div>
+                    <p class="block_1" id="addition1">В_________________ <span class="text_">&lt;1&gt;</span></p>
+
+
+                    @{Html.RenderPartial("Templ/Templates");}
+
+                    <p class="block_3">Истец: </p>
+                    <div id="anchor2"> </div>
+                    <p class="block_3" id="addition2"></p>
+
+                    <p class="block_3">адрес*: ________________________________________________________,</p>
+                    <p class="block_3">телефон: ______________________, факс: ________________________,</p>
+                    <p class="block_3">адрес электронной почты: _______________________________________</p>
+
+                    <div id="anchor3"> </div>
+                    <div id="addition3">
+
+                    </div>
+
+
+                    <p class="block_3">Ответчик:</p>
+
+                    <div id="anchor9"> </div>
+                    <div id="addition9">
+                        <p class="block_3"> ___________________________ (наименование* или Ф.И.О.*),</p>
+                        <p class="block_3">адрес*: ________________________________________________________,</p>
+                        <p class="block_3">телефон: ______________________, факс: ________________________,</p>
+                        <p class="block_3">адрес электронной почты: _______________________________________</p>
+                        <p class="block_3"> </p>
+                    </div>
+
+                    <p class="block_3" style="margin-top: 40px;"> </p>
+                    <p class="block_3">Цена иска: ________________________________ рублей <span class="text_">&lt;4&gt;</span></p>
+                    <div id="addition22"> </div>
+
+                    <p class="block_5">ИСКОВОЕ ЗАЯВЛЕНИЕ </p>
+                    <p class="block_5"><span class="text_">&lt;5&gt;</span></p>
+                    <p class="block_7">
+                    </p>
+
+                    <div id="anchor13"> </div>
+                    <div id="addition13">
+                        <!--
+            <p class="block_8">"___"___________ ____ г. между истцом и ответчиком был заключен Договор</p>
+            <p class="block_7">___________________________________________________________________________</p>
+            <p class="block_7"><span class="text_2">Варианты ответов (сделать три разных):</span> </p>
+            <p class="block_7">купли-продажи</p>
+            <p class="block_7"> </p>
+            <p class="block_7"><span class="calibre2">возмездного оказания  услуг</span></p>
+            <p class="block_7"> </p>
+            <p class="block_7">бытового подряда</p>
+            <p class="block_7"> </p>
+            <p class="block_7"><span class="calibre2">(далее  -  Договор),  в  соответствии с которым ответчик обязался в срок до</span></p>
+            <p class="block_7"><span class="calibre2">"___"___________   ____  г.</span></p>
+            <p class="block_7"> </p>
+
+
+            <p class="block_7"><span class="text_2">Вариант если купля:</span> предоставить </p>
+            <p class="block_7"><span class="text_2">Вариант если услуги/ подряд:</span> оказать</p>
+            <p class="block_7"> </p>
+            <p class="block_7">истцу</p>
+            <p class="block_7">______________________,<span class="tab">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="calibre2">а   истец оплатить</span></p>
+            <p class="block_7"> </p>
+            <p class="block_7"><span class="text_2">Вариант если купля:</span><span class="calibre2">  товар  </span></p>
+            <p class="block_7"><span class="text_2">Вариант если услуги:</span><span class="calibre2">  оказанные услуги</span></p>
+            <p class="block_7"><span class="text_2">Вариант если подряд</span>: выполненные работы</p>
+            <p class="block_7"> </p>
+            <p class="block_7"> в размере ________ (_____________) рублей.</p>
+            <p class="block_2">"___"___________ ____ г. истец оплатил</p>
+            <p class="block_2"> </p>
+            <p class="block_7"><span class="text_2">Вариант если купля:</span><span class="calibre2">  товар  </span></p>
+            <p class="block_7"><span class="text_2">Вариант если услуги:</span><span class="calibre2">  оказанные услуги</span></p>
+            <p class="block_7"><span class="text_2">Вариант если подряд</span>: выполненные работы</p>
+            <p class="block_2"> </p>
+            <p class="block_2"> в размере ____________ (_________) рублей, что подтверждается ___________________________.</p>
+            <p class="block_2">Однако в нарушение Договора</p>
+            <p class="block_2"> </p>
+            <p class="block_7"><span class="text_2">Вариант если купля:</span><span class="calibre2">  товар  </span></p>
+            <p class="block_7"><span class="text_2">Вариант если услуги:</span><span class="calibre2">  услуги</span></p>
+            <p class="block_7"><span class="text_2">Вариант если подряд</span>: результат работ</p>
+            <p class="block_2"> </p>
+            <p class="block_9">Варианты ответов на выбор (обязателен для заполнения, но не зависит от ответов выше):</p>
+            <ol class="list_">
+                <li class="block_10">не соответствует _______________________________ </li>
+                <li class="block_11">ответчиком нарушен срок, установленный Договором</li>
+            </ol>
+            <p class="block_9">Подварианты для 2:</p>
+            <p class="block_2">для предоставления товара</p>
+            <p class="block_2">оказания услуг</p>
+            <p class="block_2">выполнения работ</p>
+            <p class="block_2"></p>
+            <p class="block_2"></p>
+            <p class="block_2"> что подтверждается ____________________________.</p>
+            <p class="block_2">В результате нарушения ответчиком условий Договора нарушены права и законные интересы истца, что выражается в следующем: _________________________ и подтверждается _____________________________.</p>
+            <p class="block_2">Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100025&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100025&amp;fld=134" class="text_1">п. 1 ст. 4</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" продавец (исполнитель) обязан передать потребителю товар (выполнить работу, оказать услугу), качество которого соответствует договору.</p>
+            <p class="block_2">(Варианты. Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100041&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100041&amp;fld=134" class="text_1">п. 1 ст. 7</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" потребитель имеет право на то, чтобы товар (работа, услуга) при обычных условиях его использования, хранения, транспортировки и утилизации был безопасен для жизни, здоровья потребителя, окружающей среды, а также не причинял вред имуществу потребителя. Требования, которые должны обеспечивать безопасность товара (работы, услуги) для жизни и здоровья потребителя, окружающей среды, а также предотвращение причинения вреда имуществу потребителя, являются обязательными и устанавливаются законом или в установленном им порядке.</p>
+            <p class="block_2">Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100053&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100053&amp;fld=134" class="text_1">п. 1 ст. 8</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" потребитель вправе потребовать предоставления необходимой и достоверной информации об изготовителе (исполнителе, продавце), режиме его работы и реализуемых им товарах (работах, услугах).</p>
+            <p class="block_2">Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100061&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100061&amp;fld=134" class="text_1">п. 1 ст. 10</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" изготовитель (исполнитель, продавец) обязан своевременно предоставлять потребителю необходимую и достоверную информацию о товарах (работах, услугах), обеспечивающую возможность их правильного выбора. По отдельным видам товаров (работ, услуг) перечень и способы доведения информации до потребителя устанавливаются Правительством Российской Федерации.)</p>
+            <p class="block_9"> Вариант если будет купля</p>
+            <p class="block_2">Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=14&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=14&amp;fld=134" class="text_1">п. 1 ст. 18</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" потребитель в случае обнаружения в товаре недостатков, если они не были оговорены продавцом, по своему выбору вправе:</p>
+            <p class="block_9">(выбор один из)</p>
+            <div class="calibre4">
+                <div class="block_12"><span class="bullet_">●&nbsp;</span><span class="calibre5">потребовать замены на товар этой же марки (этих же модели и (или) артикула);</span></div>
+                <div class="block_13"><span class="bullet_">●&nbsp;</span><span class="calibre5">потребовать замены на такой же товар другой марки (модели, артикула) с соответствующим перерасчетом покупной цены;</span></div>
+                <div class="block_13"><span class="bullet_">●&nbsp;</span><span class="calibre5">потребовать соразмерного уменьшения покупной цены;</span></div>
+                <div class="block_13"><span class="bullet_">●&nbsp;</span><span class="calibre5">потребовать незамедлительного безвозмездного устранения недостатков товара или возмещения расходов на их исправление потребителем или третьим лицом;</span></div>
+                <div class="block_14"><span class="bullet_">●&nbsp;</span><span class="calibre5">отказаться от исполнения договора купли-продажи и потребовать возврата уплаченной за товар суммы. По требованию продавца и за его счет потребитель должен возвратить товар с недостатками.</span></div>
+            </div>
+            <p class="block_2">При этом потребитель вправе потребовать также полного возмещения <b class="calibre6">убытков</b>, причиненных ему вследствие продажи товара ненадлежащего качества. Убытки возмещаются в сроки, установленные<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020" class="text_1">Законом</a> Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" для удовлетворения соответствующих требований потребителя.</p>
+            <p class="block_9">Вариант если услуга, подряд</p>
+            <p class="block_2">Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100210&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100210&amp;fld=134" class="text_1">п. 1 ст. 29</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" потребитель при обнаружении недостатков выполненной работы (оказанной услуги) вправе по своему выбору потребовать:</p>
+            <p class="block_9">(открываем множество выбора, выбираем один из)</p>
+            <div class="calibre4">
+                <div class="block_12"><span class="bullet_">●&nbsp;</span><span class="calibre5">безвозмездного устранения недостатков выполненной работы (оказанной услуги);</span></div>
+                <div class="block_13"><span class="bullet_">●&nbsp;</span><span class="calibre5">соответствующего уменьшения цены выполненной работы (оказанной услуги);</span></div>
+                <div class="block_13"><span class="bullet_">●&nbsp;</span><span class="calibre5">безвозмездного изготовления другой вещи из однородного материала такого же качества или повторного выполнения работы. При этом потребитель обязан возвратить ранее переданную ему исполнителем вещь;</span></div>
+                <div class="block_14"><span class="bullet_">●&nbsp;</span><span class="calibre5">возмещения понесенных им расходов по устранению недостатков выполненной работы (оказанной услуги) своими силами или третьими лицами.)</span></div>
+            </div>
+            <p class="block_2"> </p>
+            <p class="block_2"></p>
+            <p class="block_9">Вариант если услуги/ подряд:</p>
+            <p class="block_2">Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100361&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100361&amp;fld=134" class="text_1">п. 1 ст. 13</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" за нарушение прав потребителей изготовитель (исполнитель, продавец, уполномоченная организация или уполномоченный индивидуальный предприниматель, импортер) несет ответственность, предусмотренную законом или договором.</p>
+            <p class="block_2"></p>
+        -->
+                    </div>
+
+                    <div id="anchor14"> </div>
+                    <div id="addition14"> </div>
+                    <div id="addition13_3"> </div>
+
+                    <p class="block_2">В результате нарушения ответчиком условий Договора нарушены права и законные интересы истца, что выражается в следующем: _________________________ и подтверждается _____________________________.</p>
+                    <p class="block_2">Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100025&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100025&amp;fld=134" class="text_1">п. 1 ст. 4</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" продавец (исполнитель) обязан передать потребителю товар (выполнить работу, оказать услугу), качество которого соответствует договору.</p>
+                    <p class="block_2">(Варианты. Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100041&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100041&amp;fld=134" class="text_1">п. 1 ст. 7</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" потребитель имеет право на то, чтобы товар (работа, услуга) при обычных условиях его использования, хранения, транспортировки и утилизации был безопасен для жизни, здоровья потребителя, окружающей среды, а также не причинял вред имуществу потребителя. Требования, которые должны обеспечивать безопасность товара (работы, услуги) для жизни и здоровья потребителя, окружающей среды, а также предотвращение причинения вреда имуществу потребителя, являются обязательными и устанавливаются законом или в установленном им порядке.</p>
+                    <p class="block_2">Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100053&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100053&amp;fld=134" class="text_1">п. 1 ст. 8</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" потребитель вправе потребовать предоставления необходимой и достоверной информации об изготовителе (исполнителе, продавце), режиме его работы и реализуемых им товарах (работах, услугах).</p>
+                    <p class="block_2">Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100061&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100061&amp;fld=134" class="text_1">п. 1 ст. 10</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" изготовитель (исполнитель, продавец) обязан своевременно предоставлять потребителю необходимую и достоверную информацию о товарах (работах, услугах), обеспечивающую возможность их правильного выбора. По отдельным видам товаров (работ, услуг) перечень и способы доведения информации до потребителя устанавливаются Правительством Российской Федерации.)</p>
+
+                    <div id="anchor17"> </div>
+                    <div id="addition17">
+
+                    </div>
+
+                    <div id="anchor15"> </div>
+                    <div id="addition15">
+                        <!-- <p class="block_9">Тут пишем вопрос: причинен ли истцу моральный вред?</p> -->
+                        <!--
+        <p class="block_9">Вариант, если да</p>
+        <p class="block_2">Кроме того, истцу причинен <b class="calibre6">моральный вред</b>, что выразилось в следующем: _________________________ и подтверждается ___________________________. Сумму морального вреда истец оценивает в ____________ (___________) рублей.</p>
+        <p class="block_2">Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=340325&amp;date=14.07.2020&amp;dst=688&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=340325&amp;date=14.07.2020&amp;dst=688&amp;fld=134" class="text_1">абз. 1 ст. 151</a> Гражданского кодекса Российской Федерации, если гражданину причинен моральный вред (физические или нравственные страдания) действиями, нарушающими его личные неимущественные права либо посягающими на принадлежащие гражданину другие нематериальные блага, а также в других случаях, предусмотренных законом, суд может возложить на нарушителя обязанность денежной компенсации указанного вреда.</p>
+        <p class="block_2">Согласно<a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100105&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020&amp;dst=100105&amp;fld=134" class="text_1">ст. 15</a> Закона Российской Федерации от 07.02.1992 N 2300-1 "О защите прав потребителей" моральный вред, причиненный потребителю вследствие нарушения изготовителем (исполнителем, продавцом, уполномоченной организацией или уполномоченным индивидуальным предпринимателем, импортером) прав потребителя, предусмотренных законами и правовыми актами Российской Федерации, регулирующими отношения в области защиты прав потребителей, подлежит компенсации причинителем вреда при наличии его вины. Размер компенсации морального вреда определяется судом и не зависит от размера возмещения имущественного вреда.</p>
+        <p class="block_9">Если нет, то ничего не добавляем</p>
+        -->
+                    </div>
+
+                    <div id="anchor16"> </div>
+                    <div id="addition16">
+                        <!--
+        <p class="block_15"><span class="text_2">Задаем вопрос: Предпринял ли истец попытку урегулировать спор, не прибегая к судебной процедуре?</span></p>
+        <p class="block_16">Если да (в приложениях появляется досудебная претензия Приложение 6):</p>
+        <p class="block_17"><span class="calibre2">Требование   (претензию)   истца   от   "___"___________   ____   г.  о</span></p>
+        <p class="block_7"><span class="calibre2">_____________________  и  компенсации  морального  вреда в размере ________</span></p>
+        <p class="block_7"><span class="calibre2">(___________)  рублей  ответчик  добровольно не удовлетворил, сославшись на</span></p>
+        <p class="block_7">___________________________________________________________________________</p>
+        <p class="block_7">(или: осталось без ответа), что подтверждается _______________________ &lt;6&gt;.</p>
+        <p class="block_8">"___"______ ____ были предприняты действия, направленные на примирение,</p>
+        <p class="block_7">что подтверждается _____________________________________, но договоренности</p>
+        <p class="block_7"><span class="calibre2">между  сторонами  достигнуто  не  было  (или:   действия,  направленные  на</span></p>
+        <p class="block_7">примирение, сторонами не предпринимались).</p>
+        <p class="block_18">Если нет, то ничего не пишем. </p>
+        -->
+                    </div>
+
+                    <div id="addition22_1">
+                    </div>
+
+                    <p class="block_8"><span class="calibre2">На  основании изложенного, руководствуясь положениями</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351249&amp;date=14.07.2020" class="text_1">Закона</a> Российской</p>
+                    <p class="block_19"><span class="text_3"><span class="calibre2">Федерации  от  07.02.1992  N  2300-1  "О защите прав потребителей",</span></span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=340325&amp;date=14.07.2020&amp;dst=100875&amp;fld=134" class="text_6"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=340325&amp;date=14.07.2020&amp;dst=100875&amp;fld=134" class="text_7">ст. 151</a><span class="text_8"></span></p>
+                    <p class="block_7"><span class="calibre2">Гражданского  кодекса  Российской Федерации, в соответствии со</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=100628&amp;fld=134" class="calibre3"> </a><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=100628&amp;fld=134" class="text_1">ст. ст. 131</a>,</p>
+                    <p class="block_7"><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=100643&amp;fld=134" class="text_1">132</a> Гражданского процессуального кодекса Российской Федерации, <b class="calibre6">прошу</b>:</p>
+
+                    <div id="addition17_1"> </div>
+                    <!--<p class="block_7"> &lt;<span class="text_2">Далее - список требований, отмечается галочками по необходимости.</span><span class="text_9"> </span><span class="text_10">В квадратных скобках - название для анкеты</span>&gt;</p>-->
+                    <div class="calibre4">
+                        <div id="addition18_1"></div>
+                        <div id="addition18_2"></div>
+                        <div id="addition18_3"></div>
+                        <div id="addition18_4"></div>
+                        <div id="addition18_5"></div>
+                        <div id="addition18_6"></div>
+                        <div id="addition18_7"></div>
+                        <div id="addition18_8"></div>
+                        <div id="addition18_9"></div>
+                    </div>
+
+
+                    <p class="block_2">Приложение:</p>
+
+                    <div id="addition13_2">
+                        <!--
+        <p class="block_2">. Копия договора о предоставлении товара <span class="text_2">(если купля)</span> оказании услуг <span class="text_2"> (если услуги)</span> выполнении работ <span class="text_2">(если подряд)</span>.</p>
+        <p class="block_2">2. Документы об оплате истцом товара <span class="text_2">(если купля) </span>услуг <span class="text_2">(если услуги)</span> работ <span class="text_2">(если подряд)</span>. </p>
+        -->
+                    </div>
+
+                    <p class="block_2">3. Документы, подтверждающие обстоятельства, на которых истец основывает свои требования.</p>
+                    <p class="block_2">4. Расчет взыскиваемой денежной суммы.</p>
+                    <p class="block_2">5. Документы, подтверждающие несение судебных расходов.</p>
+                    <p class="block_2">6. Копия требования (претензии) истца и доказательства отказа ответчика от удовлетворения требования (претензии) истца <span class="text_">&lt;6&gt;</span>.</p>
+                    <p class="block_2">7. Уведомление о вручении или иные документы, подтверждающие направление ответчику и третьим лицам (если они участвуют в деле) копий искового заявления и приложенных к нему документов, которые у него отсутствуют.</p>
+                    <p class="block_2">8. Доверенность представителя (или иные документы, подтверждающие полномочия представителя) от "___" __________ ____ N ___ (если исковое заявление подписывается представителем истца) <span class="text_">&lt;2&gt;</span>.</p>
+                    <p class="block_2">9. Иные документы, подтверждающие обстоятельства, на которых истец основывает свои требования.</p>
+                    <p class="block_2"> </p>
+
+
+
+                    <p class="block_8">Истец (представитель)</p>
+                    <p class="block_7"> </p>
+                    <p class="block_8">"___"__________ ____ г.</p>
+                    <p class="block_7"> </p>
+                    <p class="block_7">________________(подпись) /__________________________________________(Ф.И.О.)</p>
+                    <p class="block_2"> </p>
+                    <p class="block_2">--------------------------------</p>
+                    <p class="block_2"></p>
+                    <p class="block_2"> </p>
+                    <p class="block_5">  _____ ССЫЛКИ _____ </p>
+                    <p class="block_2"> </p>
+                    <p class="block_2"><span class="text_">&lt;1&gt; О разграничении подсудности между мировым судьей и районным судом см.</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=100110&amp;fld=134" class="text_1"> ст. ст. 23</a><span class="text_"> и</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=100122&amp;fld=134" class="text_1"> 24</a><span class="text_"> Гражданского процессуального кодекса Российской Федерации.</span></p>
+                    <p class="block_2"><span class="text_">В соответствии со ст.ст.27-30</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=1721&amp;fld=134" class="text_1"> </a><span class="text_">Гражданского процессуального кодекса Российской Федерации определяется территориальная подсудность.</span> </p>
+
+                    <p class="block_2"> </p>
+                    <p class="block_2"><span class="text_">&lt;2&gt; О требованиях, предъявляемых к представителям и документам, подтверждающим их полномочия, см.</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=1208&amp;fld=134" class="text_1"> ст. ст. 49</a><span class="text_"> -</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=100253&amp;fld=134" class="text_1"> 54</a><span class="text_"> Гражданского процессуального кодекса Российской Федерации.</span></p>
+
+                    <p class="block_2"> </p>
+                    <p class="block_2"><span class="text_">&lt;3&gt; Указывается один из идентификаторов: СНИЛС, ИНН, ОГРНИП, серия и номер документа, удостоверяющего личность, водительского удостоверения или свидетельства о регистрации транспортного средства. Если истцом является гражданин, идентификатор указывается, если он ему известен (</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=1269&amp;fld=134" class="text_1">п. 3 ч. 2 ст. 131</a><span class="text_"> Гражданского процессуального кодекса Российской Федерации).</span></p>
+
+                    <p class="block_2"> </p>
+                    <p class="block_2"><span class="text_">&lt;4&gt; Цена иска по искам о взыскании денежных средств, согласно</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=100427&amp;fld=134" class="text_1"> п. 1 ч. 1 ст. 91</a><span class="text_"> Гражданского процессуального кодекса Российской Федерации, определяется исходя из взыскиваемой денежной суммы.</span></p>
+
+                    <p class="block_2"> </p>
+                    <p class="block_6"><span class="text_4">&lt;5&gt; В соответствии с</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=342431&amp;date=14.07.2020&amp;dst=11645&amp;fld=134" class="text_5"> пп. 4 п. 2</a><span class="text_4"> и</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=342431&amp;date=14.07.2020&amp;dst=11647&amp;fld=134" class="text_5"> п. 3 ст. 333.36</a><span class="text_4"> Налогового кодекса Российской Федерации от уплаты государственной пошлины по делам, рассматриваемым в судах общей юрисдикции, а также мировыми судьями, освобождаются истцы по искам, связанным с нарушением прав потребителей, если цена иска не превышает 1 000 000 руб.</span></p>
+
+                    <p class="block_2"> </p>
+                    <p class="block_2"><span class="text_">&lt;6&gt; Согласно</span><a href="https://login.consultant.ru/link/?req=doc&amp;base=LAW&amp;n=351272&amp;date=14.07.2020&amp;dst=1275&amp;fld=134" class="text_1"> п. 3 ст. 132</a><span class="text_"> Гражданского процессуального кодекса Российской Федерации к исковому заявлению должны быть приложены документы, подтверждающие выполнение обязательного досудебного порядка урегулирования спора, если такой порядок установлен федеральным законом.</span></p>
+
+                    <p class="block_26"> </p>
+                    <p class="block_27"></p>
+
+
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <script>
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+        </script>
+        <script>
+            function ShowHideDivCheckbox(number) {
+                var num = number - 36;
+                var stringId = "addition18_" + num;
+                var chboxId = "checkBox{" + number + "}";
+
+                var chbox = document.getElementById(chboxId);
+                if (chbox.checked) {
+                    var clon = document.getElementById("tempId_18_" + num + "_1").content.cloneNode(true);
+                    document.getElementById(stringId).replaceWith(clon);
+                } else {
+                    var clon = document.getElementById("tempId_18_" + num + "_2").content.cloneNode(true);
+                    document.getElementById(stringId).replaceWith(clon);
+                }
+            }
+
+            function ShowHideDiv(number) {
+                var stringId = "addition" + number;
+                var anchorId = "anchor" + number;
+                var tempAdd = number;
+                var id = number + "";
+
+
+                var chk = document.getElementsByName(id);
+                var chosen = 0;
+                for (var i = 0; i < chk.length; ++i) {
+                    if (chk[i].checked) {
+                        chosen = i;
+                    }
+                }
+                var clon = document.getElementById("tempId_" + id + "_" + (chosen + 1)).content.cloneNode(true);
+                document.getElementById(stringId).replaceWith(clon);
+                
+              
+                if (number == 13) {
+                    var clon2 = document.getElementById("tempId_" + id + "_" + (chosen + 1) + "_2").content.cloneNode(true);
+                    document.getElementById(stringId + "_2").replaceWith(clon2);
+                    var clon3 = document.getElementById("tempId_" + id + "_" + (chosen + 1) + "_3").content.cloneNode(true);
+                    document.getElementById(stringId + "_3").replaceWith(clon3);
+                }
+                if (number == 14) {
+                    if (chosen == 0) {
+                        var clon3 = document.getElementById("tempId_13_4_3").content.cloneNode(true);
+                        document.getElementById("addition13_3").replaceWith(clon3);
+                    } else {
+                        var chk2 = document.getElementsByName("13");
+                        var chosen2 = 0;
+                        for (var i = 0; i < chk2.length; ++i) {
+                            if (chk2[i].checked) {
+                                chosen2 = i;
+                            }
+                        }
+                        var clon4 = document.getElementById("tempId_13_" + (chosen2 + 1) + "_3").content.cloneNode(true);
+                        document.getElementById("addition13_3").replaceWith(clon4);
+                    }
+                }
+                if (number == 22) {
+                    var clon2 = document.getElementById("tempId_" + id + "_" + (chosen + 1) + "_1").content.cloneNode(true);
+                    document.getElementById(stringId + "_1").replaceWith(clon2);
+                }
+                if (number == 17) {
+                    var clon2 = document.getElementById("tempId_" + id + "_" + (chosen + 1) + "_1").content.cloneNode(true);
+                    document.getElementById(stringId + "_1").replaceWith(clon2);
+                }
+            }
+            $(function () {
+                $('input[type="radio"]').click(function () {
+                    if ($('#18').is(':checked')) {
+                        $('#tr_28').css('display', 'block');
+                        $('#tr_29').css('display', 'block');
+                        $('#tr_30').css('display', 'block');
+                        $('#tr_31').css('display', 'block');
+                        $('#tr_32').css('display', 'block');
+                        $('#tr_33').css('display', 'none');
+                        $('#tr_34').css('display', 'none');
+                        $('#tr_35').css('display', 'none');
+                        $('#tr_36').css('display', 'none');
+
+
+                        $('#33').prop('checked', false);
+                        $('#34').prop('checked', false);
+                        $('#35').prop('checked', false);
+                        $('#36').prop('checked', false);
+                    }
+                    if ($('#19').is(':checked') || $('#20').is(':checked')) {
+                        $('#tr_28').css('display', 'none');
+                        $('#tr_29').css('display', 'none');
+                        $('#tr_30').css('display', 'none');
+                        $('#tr_31').css('display', 'none');
+                        $('#tr_32').css('display', 'none');
+                        $('#tr_33').css('display', 'block');
+                        $('#tr_34').css('display', 'block');
+                        $('#tr_35').css('display', 'block');
+                        $('#tr_36').css('display', 'block');
+
+                        $('#28').prop('checked', false);
+                        $('#29').prop('checked', false);
+                        $('#30').prop('checked', false);
+                        $('#31').prop('checked', false);
+                        $('#32').prop('checked', false);
+                    }
+                });
+            });
+        </script>
+        
+    </body>
+

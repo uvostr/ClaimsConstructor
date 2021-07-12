@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "SendFile";
+}
+
+<h2>SendFile</h2>
+@ViewBag.url
+@ViewBag.Wer1
+@ViewBag.Wer2
+@foreach (var elem in ViewBag.DictionaryArgUrl)
+{
+    if (elem.Key != "LawsuitsId")
+    {
+        <p>Id вопроса: @elem.Key Id ответа: @elem.Value</p>
+    }
+}
+
+@foreach (var elem in ViewBag.DictionaryAdditions)
+{
+    <p><b>Метка: </b> @elem.Key</p>
+    <p><b>Текст метки:</b> @elem.Value</p>
+
+}
+
+

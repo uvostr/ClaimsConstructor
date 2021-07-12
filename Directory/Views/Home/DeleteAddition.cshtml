@@ -1,0 +1,24 @@
+﻿@model global::Directory.Models.AdditionBlocks
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Подтверждение удаления метки</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(m => m.DocxKey, "Метка в документе")
+    <br />
+    @Html.DisplayFor(m => m.DocxKey)
+    <br />
+    <br />
+
+    @Html.LabelFor(m => m.Information, "Текст в документе")
+    <br />
+    @Html.DisplayFor(m => m.Information)
+    <br />
+    <br />
+
+    <input type="submit" value="Удалить" />
+}

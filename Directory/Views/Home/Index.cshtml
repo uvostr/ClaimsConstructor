@@ -1,16 +1,19 @@
 ﻿@model IEnumerable<global::Directory.Models.Lawsuit>
-@{
-    ViewBag.Title = "Home Page";
-}
 
-<h1>Шаблоны исков</h1>
-<table class="table">
-    @foreach (global::Directory.Models.Lawsuit item in Model)
-    {
-        <tr>
-            <td>
-                @Html.ActionLink(item.Name, "Form", new { id = item.Id })
-            </td>
-        </tr>
-    }
-</table>
+<head>
+    <title>Заголовок</title>
+    <link type="text/css" rel="stylesheet" href="../../Content/mainPageCSS.css" />
+</head>
+
+<body>
+    <h1>Выберете шаблон</h1>
+    <div>
+        <ul class="list6b">
+            @foreach (global::Directory.Models.Lawsuit item in Model)
+            {
+                <li> @Html.ActionLink(item.Name, "Form", new { id = item.Id }) </li>
+            }
+        </ul>
+       
+    </div>
+</body>

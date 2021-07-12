@@ -1,0 +1,14 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (ViewBag.Error == true)
+{
+    <p>Ошибка!</p>
+}
+@using (Html.BeginForm())
+{
+    <p>Введите пароль @Html.TextBox("Password", "")</p>
+    <p><input type="submit" value="Вход" /></p>
+}
+
+

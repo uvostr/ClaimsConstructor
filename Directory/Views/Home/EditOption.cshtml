@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "Редактировать варианты ответа";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model global::Directory.Models.OptionAdditions
+
+
+<head>
+    <link rel="stylesheet" href="../../Content/AdminForms.css">
+</head>
+
+<h2>Вариант ответа: @Model.option.Text</h2>
+
+@using (Html.BeginForm("EditOption", "Home", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.option.Id)
+
+    @Html.LabelFor(m => m.option.Text, "Текст варианта ответа")
+    <br />
+    @Html.TextAreaFor(m => m.option.Text)
+    <br />
+    <br />
+
+    @Html.HiddenFor(m => m.option.QuestionId)
+
+    for (int i = 0; i < Model.additions.Count; i++)
+    {
+
+        @Html.HiddenFor(m => m.additions[i].Id)
+
+        @Html.HiddenFor(m => m.additions[i].IdOption)
+
+        @Html.LabelFor(m => m.additions[i].DocxKey, "Метка в документе")
+        <br />
+        @Html.TextAreaFor(m => m.additions[i].DocxKey)
+        <br />
+        <br />
+
+        @Html.LabelFor(m => m.additions[i].Information, "Текст в документе")
+        <br />
+        @Html.TextAreaFor(m => m.additions[i].Information)
+        <br />
+        <br />
+        @Html.ActionLink("Удалить блок текста", "DeleteAddition", new { id = Model.additions[i].Id })
+        <br />
+        <br />
+    }
+    @Html.ActionLink("Добавить новый блок текста", "CreateAddition", new { IdOption = Model.option.Id })
+    <br />
+    <br />
+
+    <input type="submit" value="Отправить" />
+}

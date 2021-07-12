@@ -1,0 +1,51 @@
+﻿@model global::Directory.Models.Question
+
+@{
+    ViewBag.Title = "Редактировать вопрос";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <link rel="stylesheet" href="../../Content/AdminForms.css">
+</head>
+
+<h2>Вопрос: @Model.Text</h2>
+
+@using (Html.BeginForm("EditQuestion", "Home", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.Id)
+
+    @Html.LabelFor(m => m.Text, "Текст вопроса")
+    <br />
+    @Html.TextAreaFor(m => m.Text)
+    <br />
+    <br />
+
+    @Html.HiddenFor(m => m.LawsuitId)
+
+    @Html.LabelFor(m => m.Tip, "Всплывающая подсказка")
+    <br />
+    @Html.TextAreaFor(m => m.Tip)
+    <br />
+    <br />
+    @Html.HiddenFor(m => m.OrderNumber)
+    @*@Html.LabelFor(model => model.OrderNumber, "Приоритет вывода в анкте:")
+        <br />
+        @Html.EditorFor(model => model.OrderNumber)
+        <br />
+        <br />*@
+
+    @Html.LabelFor(model => model.TypeInput, "Одиночный/множественный выбор")
+    <br />
+    @Html.DropDownListFor(model => model.TypeInput, new SelectList(new string[] { "одиночный", "множественный" }))
+    <br />
+    <br />
+
+    @*@Html.LabelFor(model => model.DependenceQuestionId, "Укажите опцию от которой зависит данное поле, иначе оставьте данное поле пустым:")
+        <br />
+        @Html.EditorFor(model => model.DependenceQuestionId)
+        <br />
+        <br />*@
+
+    <input type="submit" value="Отправить" />
+}

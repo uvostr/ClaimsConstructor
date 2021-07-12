@@ -1,0 +1,28 @@
+﻿@model global::Directory.Models.AdditionBlocks
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <link rel="stylesheet" href="../../Content/AdminForms.css">
+</head>
+
+<h2>Новая метка</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(model => model.DocxKey, "Метка в документе")
+    <br />
+    @Html.TextAreaFor(model => model.DocxKey)
+    <br />
+    <br />
+
+    @Html.LabelFor(model => model.Information, "Текст документа")
+    <br />
+    @Html.TextAreaFor(model => model.Information)
+    <br />
+    <br />
+
+    <input type="submit" value="Добавить" />
+}
